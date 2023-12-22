@@ -209,7 +209,7 @@ func Parse(layout string, versionString string) (*Version, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Printf("fieldFmt=%+v, field=%+v\n", fieldFmt, field)
+		// fmt.Printf("fieldFmt=%+v, field=%+v\n", fieldFmt, field)
 		advance, err := field.Read(v, fieldFmt, versionString)
 		if err != nil {
 			return nil, err
@@ -218,7 +218,7 @@ func Parse(layout string, versionString string) (*Version, error) {
 			break // allow end, and meets end of versionString
 		}
 		layout = suffix
-		fmt.Printf("advance=%+v, taken=%+v, remaining=%+v\n", advance, versionString[:advance], versionString[advance:])
+		// fmt.Printf("advance=%+v, taken=%+v, remaining=%+v\n", advance, versionString[:advance], versionString[advance:])
 		versionString = versionString[advance:]
 	}
 	if len(versionString) > 0 {
