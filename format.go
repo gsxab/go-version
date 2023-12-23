@@ -21,12 +21,14 @@ package version
 type Field int
 
 const (
+	// the same value as in 5.4.3-beta(2).1
 	build     Field = 1
 	preRelTag Field = 2
 	patch     Field = 3
 	minor     Field = 4
 	major     Field = 5
-	other     Field = 1 + iota
+	// symbols which values do not need specifying
+	other Field = 1 + iota
 	fixed
 	allowEnd
 	alphabetic_build
