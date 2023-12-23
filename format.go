@@ -41,11 +41,11 @@ const (
 
 func (field Field) SetField(v *Version, val int64) {
 	switch field {
-	case build:
+	case build, alphabetic_build:
 		v.Build = val
 	case preRelTag:
 		v.PreRel = PreRelTag(val)
-	case patch:
+	case patch, alphabetic_patch:
 		v.Patch = val
 	case minor:
 		v.Minor = val
@@ -118,6 +118,9 @@ func readAlpha(source string) (int64, int, error) {
 		if !isAsciiAlpha(source[i]) {
 			break
 		}
+	}
+	if i == 0 {
+		return 0, 0, nil
 	}
 	str := source[:i]
 	val := int64(0)

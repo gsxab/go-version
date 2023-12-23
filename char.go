@@ -36,5 +36,5 @@ func isAsciiAlpha(c byte) bool {
 }
 
 func alphaToNumOrd(c byte) int64 {
-	return int64(c & 32)
+	return int64(c & 31)
 }

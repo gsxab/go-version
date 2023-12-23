@@ -580,3 +580,151 @@ func TestVMajorMinor(t *testing.T) {
 
 	test(t, format, cases)
 }
+
+func TestAlphabeticPatch(t *testing.T) {
+	format := "5.4y"
+
+	cases := []tc{
+		{
+			"v1",
+			nil,
+			true,
+		},
+		{
+			"1",
+			nil,
+			true,
+		},
+		{
+			"1.1",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 0,
+			},
+			false,
+		},
+		{
+			"1.1a",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+			},
+			false,
+		},
+		{
+			"1.1z",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 26,
+			},
+			false,
+		},
+		{
+			"1.1aa",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 27,
+			},
+			false,
+		},
+		{
+			"3.5bc",
+			&version.Version{
+				Major: 3,
+				Minor: 5,
+				Patch: 2*26 + 3,
+			},
+			false,
+		},
+		{
+			"3.5b1",
+			nil,
+			true,
+		},
+	}
+
+	test(t, format, cases)
+}
+
+func TestAlphabeticBuild(t *testing.T) {
+	format := "5.4.3z"
+
+	cases := []tc{
+		{
+			"v1",
+			nil,
+			true,
+		},
+		{
+			"1",
+			nil,
+			true,
+		},
+		{
+			"1.1",
+			nil,
+			true,
+		},
+		{
+			"1.1.1",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+				Build: 0,
+			},
+			false,
+		},
+		{
+			"1.1.1a",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+				Build: 1,
+			},
+			false,
+		},
+		{
+			"1.1.1z",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+				Build: 26,
+			},
+			false,
+		},
+		{
+			"1.1.1aa",
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+				Build: 27,
+			},
+			false,
+		},
+		{
+			"3.5.8bc",
+			&version.Version{
+				Major: 3,
+				Minor: 5,
+				Patch: 8,
+				Build: 2*26 + 3,
+			},
+			false,
+		},
+		{
+			"3.5b.1",
+			nil,
+			true,
+		},
+	}
+
+	test(t, format, cases)
+}
