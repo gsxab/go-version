@@ -17,6 +17,8 @@ However, to make it generalized to other common versioning schemes, we have to t
     <dd>A numeric counter counts as <em>1</em>, <em>2</em>, <em>3</em>, <em>4</em>, etc.</dd>
     <dt><strong>Alphabetic Counter</strong></dt>
     <dd>An alphabetic counter counts as <em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, etc., and it counts as <em>aa</em>, <em>ab</em>, <em>ac</em> after <em>z</em>. <br/> If capitals are used, i.e. <em>A</em>, <em>B</em>, <em>C</em>, and <em>Z</em>, <em>AA</em>, <em>AB</em>, we say the counter is in capitals. </dd>
+    <dt>Roman Counter</dt>
+    <dd>An roman counter counts as <em>i</em>, <em>ii</em>, <em>iii</em>, <em>iv</em>, etc. <br/> If capitals are used, i.e. <em>I</em>, <em>II</em>, <em>III</em>, <em>IV</em>, we say the counter is in capitals. <br/> Roman counters are only reserved and not planned to be implemented now. </dd>
     <dt><strong>Major</strong></dt>
     <dd>The first counter in the versioning scheme.</dd>
     <dt><strong>Minor</strong></dt>
@@ -28,7 +30,7 @@ However, to make it generalized to other common versioning schemes, we have to t
     <dt><strong>Build</strong></dt>
     <dd>The counter following <strong>patch</strong> and/or <strong>pre-release tag</strong> .</dd>
     <dt><strong>Zero</strong></dt>
-    <dd>A version <em>1.1</em> is considered the same as <em>1.1.0</em>, where the <strong>patch</strong> is zero. <br/> <em>0</em> is considered zero for numeric counters, an empty string for alphabetic counters, and release for pre-rel tags.</dd>
+    <dd>A version <em>1.1</em> is considered the same as <em>1.1.0</em>, where the <strong>patch</strong> is zero. <br/> <em>0</em> is considered zero for numeric counters, an empty string for alphabetic and roman counters, and release for pre-rel tags.</dd>
 </dl>
 
 ## Placeholders
@@ -79,6 +81,8 @@ Consult the following table for details about all tokens in pattern strings.
 | `1` | Reads a numeric build. | Writes a numeric build. | If zero. |
 | `z` | Reads an alphabetic build. | Writes an alphabetic build. | If zero. |
 | `Z` | Reads an alphabetic build in capitals. | Writes an alphabetic build in capitals. | If zero. |
+| (reserved, not implemented yet) <br/> `j` | Reads an roman build. | Writes an roman build. | If zero. |
+| (reserved, not implemented yet) <br/> `J` | Reads an roman build in capitals. | Writes an roman build in capitals. | If zero. |
 | `o` | Reads all remaining text as “other”, which not considered to be part of the version number. | Writes the stored“other”. | Always. |
 | (for robustness only) <br/> other | Reads the character optionally. | Writes the character. | Always. |
 
