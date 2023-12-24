@@ -25,26 +25,26 @@ import (
 
 // format
 
-func (field Field) FormatField(v *Version, layout string) string {
+func (field Field) FormatField(v *Version, layout string) (string, bool) {
 	switch field {
 	case build:
-		return formatInt(v.Build)
+		return formatInt(v.Build), v.Build == 0
 	case alphabetic_build:
-		return formatAlpha(v.Build)
+		return formatAlpha(v.Build), v.Build == 0
 	case preRelTag:
-		return formatTag(layout, v.PreRel)
+		return formatTag(layout, v.PreRel), v.PreRel == Release
 	case patch:
-		return formatInt(v.Patch)
+		return formatInt(v.Patch), v.Patch == 0
 	case alphabetic_patch:
-		return formatAlpha(v.Patch)
+		return formatAlpha(v.Patch), v.Patch == 0
 	case minor:
-		return formatInt(v.Minor)
+		return formatInt(v.Minor), v.Minor == 0
 	case major:
-		return formatInt(v.Major)
+		return formatInt(v.Major), v.Major == 0
 	case other:
-		return v.Other
+		return v.Other, true
 	case fixed:
-		return layout
+		return layout, true
 	default:
 		panic("unexpected field to set")
 	}
@@ -55,12 +55,30 @@ func formatInt(val int64) string {
 }
 
 func formatAlpha(val int64) string {
-	str := make([]byte, 0)
-	for val > 26 {
-		str = append(str, byte(val%26)+'a')
-		val /= 26
+	if val == 0 {
+		return ""
 	}
-	return string(str)
+	revBytes := make([]byte, 0)
+	for val > 26 {
+		rem := val % 26
+		if rem != 0 {
+			revBytes = append(revBytes, byte(val%26-1)+'a')
+			val = val / 26
+		} else {
+			revBytes = append(revBytes, 'z')
+			val = val/26 - 1
+		}
+	}
+	if val != 0 {
+		revBytes = append(revBytes, byte(val%26-1)+'a')
+	}
+
+	length := len(revBytes)
+	bytes := make([]byte, length)
+	for i, b := range revBytes {
+		bytes[length-1-i] = b
+	}
+	return string(bytes)
 }
 
 func formatTag(layout string, val PreRelTag) string {
@@ -111,16 +129,31 @@ func formatTag(layout string, val PreRelTag) string {
 	return strings.Join(parts, "")
 }
 
+// Format is not a stable API.
 func Format(layout string, version *Version) (string, error) {
 	// layout example: 5.4.3-beta.1(.other)
 	parts := make([]string, 0)
+	partsIfEnd := -1
 	for len(layout) > 0 {
 		fieldFmt, field, suffix, err := nextChunk(layout)
 		if err != nil {
 			return "", err
 		}
-		parts = append(parts, field.FormatField(version, fieldFmt))
+		if field == allowEnd {
+			if partsIfEnd == -1 {
+				partsIfEnd = len(parts)
+			}
+		} else {
+			part, omit := field.FormatField(version, fieldFmt)
+			if !omit && partsIfEnd != -1 {
+				partsIfEnd = -1
+			}
+			parts = append(parts, part)
+		}
 		layout = suffix
+	}
+	if partsIfEnd != -1 {
+		parts = parts[:partsIfEnd]
 	}
 	return strings.Join(parts, ""), nil
 }
