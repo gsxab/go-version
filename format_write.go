@@ -70,7 +70,7 @@ func formatAlpha(val int64) string {
 		}
 	}
 	if val != 0 {
-		revBytes = append(revBytes, byte(val%26-1)+'a')
+		revBytes = append(revBytes, byte(val-1)+'a')
 	}
 
 	length := len(revBytes)

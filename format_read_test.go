@@ -641,6 +641,33 @@ func TestAlphabeticPatch(t *testing.T) {
 			false,
 		},
 		{
+			"1.2zz",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 26*26 + 26,
+			},
+			false,
+		},
+		{
+			"1.2aaa",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 27*26 + 1,
+			},
+			false,
+		},
+		{
+			"1.2zzz",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 26*26*26 + 26*26 + 26,
+			},
+			false,
+		},
+		{
 			"3.5b1",
 			nil,
 			true,
@@ -716,6 +743,36 @@ func TestAlphabeticBuild(t *testing.T) {
 				Minor: 5,
 				Patch: 8,
 				Build: 2*26 + 3,
+			},
+			false,
+		},
+		{
+			"1.2.3zz",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 26*26 + 26,
+			},
+			false,
+		},
+		{
+			"1.2.3aaa",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 27*26 + 1,
+			},
+			false,
+		},
+		{
+			"1.2.3zzz",
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 26*26*26 + 26*26 + 26,
 			},
 			false,
 		},

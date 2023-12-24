@@ -411,6 +411,89 @@ func TestWDashReleaseDashBuild(t *testing.T) {
 }
 
 func TestWDollarSign(t *testing.T) {
+	format := "5.4$.3.1"
+
+	cases := []tcW{
+		{
+			&version.Version{
+				Major: 1,
+			},
+			"1.0",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+			},
+			"1.1",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+			},
+			"1.1.1.0",
+			false,
+		},
+		{
+			&version.Version{
+				Major:  1,
+				Minor:  1,
+				Patch:  1,
+				PreRel: version.ReleaseCandidate,
+			},
+			"1.1.1.0",
+			false,
+		},
+		{
+			&version.Version{
+				Major:  1,
+				Minor:  1,
+				Patch:  1,
+				PreRel: version.ReleaseCandidate,
+				Build:  0,
+			},
+			"1.1.1.0",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 1,
+				Build: 1,
+			},
+			"1.1.1.1",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 2,
+				Minor: 3,
+				Patch: 4,
+				Build: 5,
+			},
+			"2.3.4.5",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 2,
+				Minor: 3,
+				Build: 5,
+			},
+			"2.3.0.5",
+			false,
+		},
+	}
+
+	testW(t, format, cases)
+}
+
+func TestWDollarSign2(t *testing.T) {
 	format := "5.4$.3$.1"
 
 	cases := []tcW{
@@ -610,6 +693,36 @@ func TestWAlphabeticPatch(t *testing.T) {
 			"1.2bcd",
 			false,
 		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 26*26 + 26,
+				Build: 4,
+			},
+			"1.2zz",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 27*26 + 1,
+				Build: 4,
+			},
+			"1.2aaa",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 26*26*26 + 26*26 + 26,
+				Build: 4,
+			},
+			"1.2zzz",
+			false,
+		},
 	}
 
 	testW(t, format, cases)
@@ -712,6 +825,36 @@ func TestWAlphabeticBuild(t *testing.T) {
 				Build: 26*26 + 2*26 + 3,
 			},
 			"3.5.8abc",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 26*26 + 26,
+			},
+			"1.2.3zz",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 27*26 + 1,
+			},
+			"1.2.3aaa",
+			false,
+		},
+		{
+			&version.Version{
+				Major: 1,
+				Minor: 2,
+				Patch: 3,
+				Build: 26*26*26 + 26*26 + 26,
+			},
+			"1.2.3zzz",
 			false,
 		},
 	}
