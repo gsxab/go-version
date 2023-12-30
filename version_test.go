@@ -20,7 +20,8 @@ package version_test
 
 import (
 	"testing"
-	"version"
+
+	"github.com/gsxab/go-version"
 )
 
 func TestVersion(t *testing.T) {
